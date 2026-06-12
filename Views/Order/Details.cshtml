@@ -1,0 +1,71 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@using FoodDeliverySystem.Models.Enums
+@model FoodDeliverySystem.Models.Entities.Order
+
+<h2>Order #@Model.Id</h2>
+
+<a href="javascript:history.back()"
+   class="btn btn-secondary mb-3">
+    Back
+</a>
+
+<p>
+    <strong>Restaurant:</strong>
+    @Model.Restaurant?.Name
+</p>
+
+<p>
+    <strong>Status:</strong>
+    @Model.Status
+</p>
+
+@if (Model.Status == OrderStatus.OutForDelivery)
+{
+    <div class="alert alert-primary">
+        🚚 Your order is on the way.
+    </div>
+}
+
+@if (Model.Status == OrderStatus.Delivered)
+{
+    <div class="alert alert-success">
+        ✅ Your order has been delivered.
+    </div>
+}
+
+@if (Model.Status == OrderStatus.Cancelled)
+{
+    <div class="alert alert-danger">
+        ❌ Your order was cancelled.
+    </div>
+}
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Food</th>
+            <th>Price</th>
+            <th>Qty</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.FoodItem?.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Quantity</td>
+            </tr>
+        }
+
+    </tbody>
+
+</table> 

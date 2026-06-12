@@ -1,0 +1,97 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model FoodDeliverySystem.ViewModels.CreateOrderVM
+
+<h2>Place Order</h2>
+
+<form asp-action="Create" method="post">
+
+    <input asp-for="FoodItemId" type="hidden" />
+
+    <input class="form-control"
+           value="@ViewBag.FoodName"
+           readonly />
+    
+        <label>Quantity</label>
+        <input name="Quantity"
+               class="form-control"
+               value="1"
+               min="1"
+               type="number" />
+   
+
+    
+        <label>Delivery Address</label>
+        <textarea name="DeliveryAddress"
+                  class="form-control"></textarea>
+  
+
+   
+        <label>Payment Method</label>
+
+        <select asp-for="PaymentMethod"
+                id="paymentMethod"
+                class="form-control">
+
+            <option value="">Select Payment Method</option>
+
+            <option value="CashOnDelivery">
+                Cash On Delivery
+            </option>
+
+            <option value="Bkash">
+                Bkash
+            </option>
+
+            <option value="Rocket">
+                Rocket
+            </option>
+
+        </select>
+   
+
+    <div class="mb-3" id="mobileNumberDiv" style="display:none">
+
+        <label>Mobile Number</label>
+
+        <input asp-for="PaymentNumber"
+               class="form-control" />
+
+     </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Confirm Order
+    </button>
+
+</form>
+
+
+@section Scripts
+{
+    <script>
+
+        document
+        .getElementById("paymentMethod")
+        .addEventListener("change", function () {
+
+            var div =
+                document.getElementById("mobileNumberDiv");
+
+            if(this.value === "Bkash" ||
+               this.value === "Rocket")
+            {
+                div.style.display = "block";
+            }
+            else
+            {
+                div.style.display = "none";
+            }
+
+        });
+
+    </script>
+}

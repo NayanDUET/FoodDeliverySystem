@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model FoodDeliverySystem.ViewModels.RegisterViewModel
+
+<h2>Register</h2>
+
+<form asp-action="Register" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label>Full Name</label>
+        <input asp-for="FullName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Password</label>
+        <input asp-for="Password" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Confirm Password</label>
+        <input asp-for="ConfirmPassword" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Select Role</label>
+
+        <select asp-for="Role" class="form-control">
+            <option value="">-- Select Role --</option>
+            <option value="Customer">Customer</option>
+            <option value="RestaurantOwner">Restaurant Owner</option>
+            <option value="DeliveryMan">Delivery Man</option>
+
+        </select>
+    </div>
+
+    <button class="btn btn-primary">
+        Register
+    </button>
+
+</form>

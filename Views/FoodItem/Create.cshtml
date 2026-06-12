@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model FoodDeliverySystem.Models.Entities.FoodItem
+<h2>Add Food Item</h2>
+<p>RestaurantId = @Model.RestaurantId</p>
+
+<form asp-action="Create" method="post">
+
+    <input type="hidden" asp-for="RestaurantId" />
+
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Description</label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Price</label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">Save</button>
+</form>

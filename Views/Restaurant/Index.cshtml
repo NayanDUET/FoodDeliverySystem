@@ -1,0 +1,52 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<FoodDeliverySystem.Models.Entities.Restaurant>
+
+<h2>Restaurants</h2>
+
+<a asp-action="Create"
+   asp-route-restaurantId="@ViewBag.RestaurantId"
+   class="btn btn-success">
+    Create New Restaurent
+</a>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Address</td>
+                <td>@item.PhoneNumber</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    <a asp-controller="FoodItem"
+                       asp-action="Index"
+                       asp-route-restaurantId="@item.Id"
+                       class="btn btn-info">
+                        Manage Food
+                    </a>
+                    <a asp-controller="RestaurantOrders"
+                       asp-action="Index"
+                       asp-route-restaurantId="@item.Id"
+                       class="btn btn-success">
+                        View Orders
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
