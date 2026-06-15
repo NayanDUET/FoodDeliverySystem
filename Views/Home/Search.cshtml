@@ -1,0 +1,101 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model FoodDeliverySystem.ViewModels.SearchResultVM
+
+<h2>
+
+    Search Result for:
+
+    <span class="text-primary">
+
+        "@Model.Keyword"
+
+    </span>
+
+</h2>
+
+<hr />
+
+<h3>Restaurants</h3>
+
+<div class="row">
+
+    @foreach (var item in Model.Restaurants)
+    {
+        <div class="col-md-4">
+
+            <div class="card mb-3">
+
+                <div class="card-body">
+
+                    <h5>
+                        @item.Name
+                    </h5>
+
+                    <p>
+                        @item.Address
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>
+
+<h3>Foods</h3>
+
+<div class="row">
+
+    @foreach (var food in Model.Foods)
+    {
+        <div class="col-md-3">
+
+            <div class="card mb-3">
+
+                @if (food.ImageUrl != null)
+                {
+                    <img src="@food.ImageUrl"
+                         class="card-img-top"
+                         style="height:180px;
+                    object-fit:cover;" />
+                }
+
+                <div class="card-body">
+
+                    <h5>
+                        @food.Name
+                    </h5>
+
+                    <p>
+                        Restaurant:
+                        @food.Restaurant?.Name
+                    </p>
+
+                    <p>
+                        Price:
+                        @food.Price TK
+                    </p>
+
+                    <a asp-controller="Order"
+                       asp-action="Create"
+                       asp-route-foodItemId="@food.Id"
+                       class="btn btn-success">
+
+                        Order Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

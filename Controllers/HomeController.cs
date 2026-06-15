@@ -1,10 +1,11 @@
 using FoodDeliverySystem.Data;
 using FoodDeliverySystem.Models;
 using FoodDeliverySystem.Models.Entities;
+using FoodDeliverySystem.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 
 namespace FoodDeliverySystem.Controllers
@@ -45,11 +46,63 @@ namespace FoodDeliverySystem.Controllers
                 }
             }
 
-            var foodItems = await _context.FoodItems
-                .Where(f => f.IsAvailable)
-                .ToListAsync();
+            var foodItems = _context.FoodItems
+                        .Include(f => f.Restaurant)
+                        .Where(f => f.IsAvailable)
+                        .ToList();
 
             return View(foodItems);
+        }
+
+        public IActionResult Search(string keyword)
+        {
+            var foods = _context.FoodItems
+
+                .Include(f => f.Restaurant)
+
+                .Where(f =>
+
+                    f.Name!.Contains(keyword)
+
+                    ||
+
+                    f.Restaurant!.Name!.Contains(keyword)
+
+                    ||
+
+                    f.Restaurant.Address!.Contains(keyword)
+
+                )
+
+                .ToList();
+
+
+
+            var restaurants = _context.Restaurants
+
+                .Where(r =>
+
+                    r.Name!.Contains(keyword)
+
+                    ||
+
+                    r.Address!.Contains(keyword)
+
+                )
+
+                .ToList();
+
+
+            var model = new SearchResultVM
+            {
+                Foods = foods,
+
+                Restaurants = restaurants,
+
+                Keyword = keyword
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()

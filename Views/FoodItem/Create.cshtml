@@ -5,9 +5,8 @@
 }
 @model FoodDeliverySystem.Models.Entities.FoodItem
 <h2>Add Food Item</h2>
-<p>RestaurantId = @Model.RestaurantId</p>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" enctype="multipart/form-data">>
 
     <input type="hidden" asp-for="RestaurantId" />
 
@@ -24,6 +23,15 @@
     <div class="form-group">
         <label>Price</label>
         <input asp-for="Price" class="form-control" />
+    </div>
+    <div class="form-group mt-2">
+
+        <label>Food Image</label>
+
+        <input type="file"
+               name="imageFile"
+               class="form-control" />
+
     </div>
 
     <button type="submit" class="btn btn-success mt-2">Save</button>

@@ -38,18 +38,7 @@ namespace FoodDeliverySystem.Controllers
 
             return View(foods);
 
-            //var restaurant = await _context.Restaurants.FindAsync(restaurantId);
-            //if (restaurant == null)
-            //    return NotFound();
-
-            //ViewBag.RestaurantName = restaurant.Name;
-            //ViewBag.RestaurantId = restaurantId;
-
-            //var foods = await _context.FoodItems
-            //    .Where(f => f.RestaurantId == restaurantId)
-            //    .ToListAsync();
-
-            //return View(foods);
+           
         }
 
         public IActionResult Create(int restaurantId)
@@ -61,14 +50,16 @@ namespace FoodDeliverySystem.Controllers
 
             return View(model);
 
-            //ViewBag.RestaurantId = restaurantId;
-            //return View();
+            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FoodItem foodItem)
-        {
+        public async Task<IActionResult> Create(
+        FoodItem foodItem,
+
+        IFormFile? imageFile)
+        { 
             var restaurant = await _context.Restaurants
             .FirstOrDefaultAsync(r => r.Id == foodItem.RestaurantId);
 
@@ -80,6 +71,31 @@ namespace FoodDeliverySystem.Controllers
             {
                 foodItem.CreatedAt = DateTime.UtcNow;
                 foodItem.IsAvailable = true;
+
+                if (imageFile != null)
+                {
+                    string fileName =
+                        Guid.NewGuid().ToString()
+                        + Path.GetExtension(imageFile.FileName);
+
+                    string folder =
+                        Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "wwwroot/images/foods");
+
+                    string filePath =
+                        Path.Combine(folder, fileName);
+
+                    using (var stream =
+                        new FileStream(filePath,
+                        FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+
+                    foodItem.ImageUrl =
+                        "/images/foods/" + fileName;
+                }
 
                 _context.FoodItems.Add(foodItem);
                 await _context.SaveChangesAsync();
@@ -102,7 +118,10 @@ namespace FoodDeliverySystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(FoodItem foodItem)
+        public async Task<IActionResult> Edit(
+        FoodItem foodItem,
+
+        IFormFile? imageFile)
         {
             if (!ModelState.IsValid)
                 return View(foodItem);
@@ -115,6 +134,36 @@ namespace FoodDeliverySystem.Controllers
             existingFood.Name = foodItem.Name;
             existingFood.Description = foodItem.Description;
             existingFood.Price = foodItem.Price;
+
+            if (imageFile != null)
+            {
+                string fileName =
+                    Guid.NewGuid().ToString()
+                    + Path.GetExtension(imageFile.FileName);
+
+                string folderPath =
+                    Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot/images/foods");
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                string filePath =
+                    Path.Combine(folderPath, fileName);
+
+                using (var stream =
+                    new FileStream(filePath,
+                    FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+
+                existingFood.ImageUrl =
+                    "/images/foods/" + fileName;
+            }
 
             await _context.SaveChangesAsync();
 

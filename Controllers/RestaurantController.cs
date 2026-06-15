@@ -25,8 +25,7 @@ namespace FoodDeliverySystem.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var restaurants = await _context.Restaurants.ToListAsync();
-            //return View(restaurants);
+            
 
             var userId = _userManager.GetUserId(User);
 

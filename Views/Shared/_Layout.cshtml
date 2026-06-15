@@ -29,8 +29,16 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+
+                        
+
+                        
+
                         @if (User.IsInRole("Customer") || !User.Identity!.IsAuthenticated)
                         {
+
+                           
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark"
                                    asp-controller="Home"
@@ -38,10 +46,28 @@
                                     Home
                                 </a>
                             </li>
+
+                            @* search bar *@
+
+                            <form class="d-flex ms-3"
+                                  asp-controller="Home"
+                                  asp-action="Search"
+                                  method="get">
+
+                                <input class="form-control me-2"
+                                       type="search"
+                                       name="keyword"
+                                       placeholder="Search food, restaurant or location"
+                                       style="width:300px" />
+
+                                <button class="btn btn-outline-success"
+                                        type="submit">
+                                    Search
+                                </button>
+
+                            </form>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                       
 
                         
                         @* Hide Menus Based on Role *@

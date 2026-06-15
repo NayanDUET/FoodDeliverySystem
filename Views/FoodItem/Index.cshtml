@@ -26,6 +26,7 @@
             <th>Price</th>
             <th>Available</th>
             <th>Actions</th>
+            <th>Image</th>
         </tr>
     </thead>
 
@@ -36,6 +37,16 @@
                 <td>@item.Name</td>
                 <td>@item.Price</td>
                 <td>@item.IsAvailable</td>
+                <td>
+
+                    @if (item.ImageUrl != null)
+                    {
+                        <img src="@item.ImageUrl"
+                             width="80"
+                             height="80" />
+                    }
+
+                </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>

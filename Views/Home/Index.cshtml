@@ -12,13 +12,36 @@
             <div class="col-md-3 mb-4">
                 <div class="card h-100 shadow-sm">
 
+                    <img src="@item.ImageUrl"
+                         class="card-img-top"
+                         style="height:200px;
+                    object-fit:cover;">
+
+
                     <div class="card-body">
-                        <h5 class="card-title">@item.Name</h5>
+
+                        <h5 class="card-title">
+                            @item.Name
+                        </h5>
+
+                        <p class="card-text">
+                            Restaurant:
+                            <strong>
+                                @item.Restaurant?.Name
+                            </strong>
+                        </p>
+                        <p class="card-text">
+                            Location:
+                            @item.Restaurant?.Address
+                        </p>
 
                         <p class="card-text">
                             Price:
-                            <strong>$@item.Price</strong>
+                            <strong>
+                                @item.Price TK
+                            </strong>
                         </p>
+
                     </div>
                     <a asp-controller="Order"
                        asp-action="Create"
@@ -26,9 +49,11 @@
                        class="btn btn-success">
                         Order Now
                     </a>
+                    </div>
+                    
 
                 </div>
-            </div>
+            
         }
 
     </div>
