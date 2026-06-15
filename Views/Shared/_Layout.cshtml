@@ -6,7 +6,6 @@
 @{
     var currentUser = await UserManager.GetUserAsync(User);
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,185 +14,206 @@
     <title>@ViewData["Title"] - FoodDeliverySystem</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Added Bootstrap Icons CDN link for pristine visual touchpoints -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FoodDeliverySystem.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FoodDeliverySystem</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+<body class="bg-light-subtle d-flex flex-column min-vh-100">
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm py-2.5">
+            <div class="container">
+               
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-primary fs-4 tracking-tight" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="fs-3">🍔</span> FoodDelivery<span class="text-success">System</span>
+                </a>
+
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
 
-                        
-
-                        
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav align-items-lg-center flex-grow-1 ps-lg-3">
 
                         @if (User.IsInRole("Customer") || !User.Identity!.IsAuthenticated)
                         {
-
-                           
-
                             <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Home"
-                                   asp-action="Index">
-                                    Home
+                                <a class="nav-link text-dark fw-medium px-3 active-link" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house-door me-1"></i> Home
                                 </a>
                             </li>
 
-                            @* search bar *@
-
-                            <form class="d-flex ms-3"
-                                  asp-controller="Home"
-                                  asp-action="Search"
-                                  method="get">
-
-                                <input class="form-control me-2"
-                                       type="search"
-                                       name="keyword"
-                                       placeholder="Search food, restaurant or location"
-                                       style="width:300px" />
-
-                                <button class="btn btn-outline-success"
-                                        type="submit">
-                                    Search
-                                </button>
-
-                            </form>
+                           
+                            <li class="nav-item my-2 my-lg-0 ms-lg-2">
+                                <form class="d-flex align-items-center position-relative nav-search-form" asp-controller="Home" asp-action="Search" method="get">
+                                    <i class="bi bi-search position-absolute text-muted ms-3 fs-6"></i>
+                                    <input class="form-control ps-5 rounded-pill bg-light border-0 py-2 fs-7 shadow-sm-inset"
+                                           type="search"
+                                           name="keyword"
+                                           placeholder="Search food, restaurants, or locations..."
+                                           style="min-width: 280px; max-width: 400px;" />
+                                    <button class="btn btn-success rounded-pill px-3 ms-2 shadow-sm d-none d-sm-block fw-semibold py-2" type="submit">
+                                        Search
+                                    </button>
+                                </form>
+                            </li>
                         }
-                       
 
-                        
-                        @* Hide Menus Based on Role *@
+                        @* Role-Based Contextual Navigation Directives *@
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Admin"
-                                   asp-action="Index">
-                                    Admin Dashboard
+                            <li class="nav-item ms-lg-2">
+                                <a class="nav-link text-dark fw-medium px-3" asp-controller="Admin" asp-action="Index">
+                                    <i class="bi bi-speedometer2 me-1 text-primary"></i> Admin Dashboard
                                 </a>
                             </li>
                         }
 
                         @if (User.IsInRole("RestaurantOwner"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Restaurant"
-                                   asp-action="Index">
-                                    My Restaurant
-                                </a>
-                            </li>
-                        }
-                        @if (User.IsInRole("Customer"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Order"
-                                   asp-action="MyOrders">
-                                    My Orders
+                            <li class="nav-item ms-lg-2">
+                                <a class="nav-link text-dark fw-medium px-3" asp-controller="Restaurant" asp-action="Index">
+                                    <i class="bi bi-shop me-1 text-primary"></i> My Restaurant
                                 </a>
                             </li>
                         }
 
+                        @if (User.IsInRole("Customer"))
+                        {
+                            <li class="nav-item ms-lg-2">
+                                <a class="nav-link text-dark fw-medium px-3" asp-controller="Order" asp-action="MyOrders">
+                                    <i class="bi bi-bag-heart me-1 text-primary"></i> My Orders
+                                </a>
+                            </li>
+                        }
 
                         @if (User.IsInRole("DeliveryMan"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Delivery"
-                                   asp-action="Index">
-                                    Available Orders
+                            <li class="nav-item ms-lg-2">
+                                <a class="nav-link text-dark fw-medium px-3" asp-controller="Delivery" asp-action="Index">
+                                    <i class="bi bi-bicycle me-1 text-primary"></i> Available Orders
                                 </a>
                             </li>
-
                             <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Delivery"
-                                   asp-action="PickedOrders">
-                                    My Picked Orders
+                                <a class="nav-link text-dark fw-medium px-3" asp-controller="Delivery" asp-action="PickedOrders">
+                                    <i class="bi bi-box-seam me-1 text-primary"></i> Picked Orders
                                 </a>
                             </li>
-
                             <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Delivery"
-                                   asp-action="DeliveredOrders">
-                                    Delivered Orders
+                                <a class="nav-link text-dark fw-medium px-3" asp-controller="Delivery" asp-action="DeliveredOrders">
+                                    <i class="bi bi-check2-circle me-1 text-success"></i> Delivered History
                                 </a>
                             </li>
                         }
+                    </ul>
 
-
-
-                        </ul>
-
-
-
-                    <ul class="navbar-nav ms-auto">
-
+                   
+                    <ul class="navbar-nav ms-auto align-items-lg-center pt-2 pt-lg-0 gap-2">
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
-                            <span class="me-3">
-                                 @(currentUser?.FullName)
-                            </span>
-
-                            <form asp-controller="Account"
-                                  asp-action="Logout"
-                                  method="post">
-
-                                <button type="submit"
-                                        class="btn btn-danger">
-                                    Logout
-                                </button>
-
-                            </form>
+                         
+                            <li class="nav-item dropdown w-100">
+                                <a class="nav-link dropdown-toggle bg-light rounded-pill px-3 py-2 d-inline-flex align-items-center gap-2 fw-semibold text-dark shadow-sm border"
+                                   href="#" id="userMenuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center text-uppercase shadow-sm" style="width: 28px; height: 28px; font-size: 0.8rem;">
+                                        @(!string.IsNullOrEmpty(currentUser?.FullName) ? currentUser.FullName.Substring(0, 1) : "U")
+                                    </div>
+                                    <span class="pe-1 text-truncate" style="max-width: 140px;">@(currentUser?.FullName ?? "Profile")</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2 p-2 rounded-3" aria-labelledby="userMenuDropdown">
+                                    <li class="px-3 py-2 border-bottom mb-1">
+                                        <span class="d-block text-muted x-small">Signed in as</span>
+                                        <span class="fw-bold text-dark text-truncate d-block small">@User.Identity.Name</span>
+                                    </li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                            <button type="submit" class="dropdown-item rounded-2 text-danger fw-medium py-2 d-flex align-items-center gap-2">
+                                                <i class="bi bi-box-arrow-right"></i> Sign Out
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
                         }
                         else
                         {
-                            <li class="nav-item me-2">
-                                <a class="btn btn-outline-primary"
-                                   asp-controller="Account"
-                                   asp-action="Login">
+                            <li class="nav-item w-100">
+                                <a class="btn btn-outline-primary rounded-pill px-4 fw-medium w-100 shadow-sm" asp-controller="Account" asp-action="Login">
                                     Login
                                 </a>
                             </li>
-
-                            <li class="nav-item">
-                                <a class="btn btn-primary"
-                                   asp-controller="Account"
-                                   asp-action="Register">
-                                    Sign Up
+                            <li class="nav-item w-100">
+                                <a class="btn btn-primary rounded-pill px-4 fw-semibold w-100 shadow-sm" asp-controller="Account" asp-action="Register">
+                                    SignUp
                                 </a>
                             </li>
                         }
-
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+   
+    <div class="container flex-grow-1 my-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - FoodDeliverySystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+   
+    <footer class="bg-white border-top py-3 text-muted fs-7 mt-auto shadow-sm">
+        <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+            <div>
+                <span>&copy; 2026 - <span class="fw-semibold text-secondary">FoodDeliverySystem</span></span>
+            </div>
+            <div class="d-flex gap-3">
+                <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted transition-color">Privacy Policy</a>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<style>
+    /* Styling adjustments for layout parity */
+    .fs-7 {
+    font-size: 0.85rem;
+    }
+
+    .x-small {
+    font-size: 0.75rem;
+    }
+
+    .tracking-tight {
+    letter-spacing: -0.5px;
+    }
+
+    .shadow-sm-inset {
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
+    }
+
+    .active-link {
+    border-bottom: 2px solid var(--bs-primary);
+    }
+
+    .transition-color:hover {
+    color: var(--bs-primary) !important;
+    }
+
+    @@media (max-width: 991.98px) {
+    .active-link {
+    border-bottom: none;
+    }
+
+    .dropdown-menu {
+    border: 1px solid var(--bs-border-color) !important;
+    }
+    }
+</style>

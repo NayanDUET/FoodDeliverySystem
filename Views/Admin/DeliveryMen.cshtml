@@ -1,20 +1,99 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model IEnumerable<FoodDeliverySystem.Models.Entities.ApplicationUser>
+﻿@model IEnumerable<FoodDeliverySystem.Models.Entities.ApplicationUser>
 
-<h2>Delivery Men</h2>
+<div class="container my-4" style="max-width: 950px;">
 
-<table class="table">
+    <!-- Logistics Administrative Header -->
+    <div class="mb-4">
+        <span class="text-uppercase tracking-wider text-muted fs-7 fw-bold">Fleet Management</span>
+        <h2 class="fw-bold text-info-dark mb-1">Registered Couriers</h2>
+        <p class="text-muted small">Monitor dispatch credentials, account profiles, and onboarding states across your active delivery force</p>
+    </div>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.FullName</td>
-            <td>@item.Email</td>
-        </tr>
+    
+    <div class="card shadow-lg border-0" style="border-radius: 1rem; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-nowrap">
+                <thead class="table-light text-uppercase fs-7 text-muted">
+                    <tr>
+                        <th class="ps-4 py-3">Courier Profile</th>
+                        <th class="py-3">Email Address</th>
+                        <th class="pe-4 py-3 text-end" style="width: 160px;">Operational Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-5 text-muted">
+                                <span class="fs-2 d-block mb-2">🚴</span>
+                                <p class="mb-0 fw-medium">No registered couriers found in the platform fleet database.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <!-- Identity Column with Courier Initials Circle -->
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-info-subtle text-info-dark fw-bold d-flex align-items-center justify-content-center text-uppercase border border-info-subtle shadow-sm flex-shrink-0"
+                                             style="width: 38px; height: 38px; font-size: 0.95rem;">
+                                            @(!string.IsNullOrEmpty(item.FullName) ? item.FullName.Substring(0, 1) : "D")
+                                        </div>
+                                        <div>
+                                            <span class="text-dark fw-bold d-block mb-0">
+                                                @(string.IsNullOrEmpty(item.FullName) ? "Independent Contractor" : item.FullName)
+                                            </span>
+                                            <span class="text-muted x-small d-block">FleetID: #@item.Id.ToString().Substring(0, Math.Min(8, item.Id.ToString().Length))</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                               
+                                <td>
+                                    <span class="text-secondary fw-medium fs-7">
+                                        <i class="bi bi-envelope-at me-1.5 text-muted"></i>@item.Email
+                                    </span>
+                                </td>
+
+                              
+                                <td class="pe-4 text-end">
+                                    <span class="badge rounded-pill bg-info-subtle text-info-dark border border-info-subtle fw-medium px-2.5 py-1.5 x-small">
+                                        <i class="bi bi-bicycle me-1"></i> Active Duty
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* System Integration Typography and Color Overrides */
+    .fs-7 {
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
     }
 
-</table>
+    .x-small {
+        font-size: 0.75rem;
+    }
+
+    .text-info-dark {
+        color: #055160 !important;
+    }
+
+    .bg-info-subtle {
+        background-color: #cff4fc !important;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fdfdfd;
+        transition: background-color 0.1s ease;
+    }
+</style>

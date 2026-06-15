@@ -1,20 +1,99 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model IEnumerable<FoodDeliverySystem.Models.Entities.FoodItem>
+﻿@model IEnumerable<FoodDeliverySystem.Models.Entities.FoodItem>
 
-<h2>Foods</h2>
+<div class="container my-4" style="max-width: 900px;">
 
-<table class="table">
+    <!-- Menu Control Header -->
+    <div class="mb-4">
+        <span class="text-uppercase tracking-wider text-muted fs-7 fw-bold">Menu Management</span>
+        <h2 class="fw-bold text-dark mb-1">Dishes & Food Items</h2>
+        <p class="text-muted small">Overview of available food variants, pricing configurations, and kitchen inventory items</p>
+    </div>
 
-    @foreach (var food in Model)
-    {
-        <tr>
-            <td>@food.Name</td>
-            <td>@food.Price</td>
-        </tr>
+   
+    <div class="card shadow-lg border-0" style="border-radius: 1rem; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-nowrap">
+                <thead class="table-light text-uppercase fs-7 text-muted">
+                    <tr>
+                        <th class="ps-4 py-3">Dish / Item Name</th>
+                        <th class="py-3 text-end" style="width: 180px;">Base Price</th>
+                        <th class="pe-4 py-3 text-end" style="width: 150px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-5 text-muted">
+                                <span class="fs-2 d-block mb-2">🍽️</span>
+                                <p class="mb-0 fw-medium">No food items added to this restaurant's menu yet.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var food in Model)
+                        {
+                            <tr>
+                               
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-3 bg-warning-subtle text-warning-dark d-flex align-items-center justify-content-center border border-warning-subtle shadow-sm flex-shrink-0"
+                                             style="width: 38px; height: 38px;">
+                                            <i class="bi bi-egg-fried fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <span class="text-dark fw-bold d-block mb-0">@food.Name</span>
+                                            <span class="text-muted x-small">ID: #@food.Id</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                               
+                                <td class="text-end fw-bold text-dark font-monospace fs-6">
+                                    @food.Price <span class="fw-normal text-muted fs-7">TK</span>
+                                </td>
+
+                               
+                                <td class="pe-4 text-end">
+                                    <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle fw-medium px-2.5 py-1.5 x-small">
+                                        <i class="bi bi-check-circle me-1"></i> Listed Active
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Continuous UI Helper Classes */
+    .fs-7 {
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
     }
 
-</table>
+    .x-small {
+        font-size: 0.75rem;
+    }
+
+    .text-warning-dark {
+        color: #664d03 !important;
+    }
+
+    .bg-warning-subtle {
+        background-color: #fff3cd !important;
+    }
+
+    .bg-success-subtle {
+        background-color: #d1e7dd !important;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fafafa;
+        transition: background-color 0.1s ease;
+    }
+</style>

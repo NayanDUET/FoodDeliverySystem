@@ -1,71 +1,166 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-@using FoodDeliverySystem.Models.Enums
+﻿@using FoodDeliverySystem.Models.Enums
 @model FoodDeliverySystem.Models.Entities.Order
 
-<h2>Order #@Model.Id</h2>
+<div class="container my-4" style="max-width: 750px;">
 
-<a href="javascript:history.back()"
-   class="btn btn-secondary mb-3">
-    Back
-</a>
-
-<p>
-    <strong>Restaurant:</strong>
-    @Model.Restaurant?.Name
-</p>
-
-<p>
-    <strong>Status:</strong>
-    @Model.Status
-</p>
-
-@if (Model.Status == OrderStatus.OutForDelivery)
-{
-    <div class="alert alert-primary">
-        🚚 Your order is on the way.
+    <!-- Header Actions -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="javascript:history.back()" class="btn btn-light border btn-sm rounded-pill px-3 text-muted fw-medium shadow-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to Orders
+        </a>
+        <span class="text-muted small fw-semibold">ID: #@Model.Id</span>
     </div>
-}
 
-@if (Model.Status == OrderStatus.Delivered)
-{
-    <div class="alert alert-success">
-        ✅ Your order has been delivered.
-    </div>
-}
+    <!-- Main Order Card -->
+    <div class="card shadow-lg border-0" style="border-radius: 1rem; overflow: hidden;">
 
-@if (Model.Status == OrderStatus.Cancelled)
-{
-    <div class="alert alert-danger">
-        ❌ Your order was cancelled.
-    </div>
-}
-
-<table class="table">
-
-    <thead>
-        <tr>
-            <th>Food</th>
-            <th>Price</th>
-            <th>Qty</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        @foreach (var item in Model.OrderItems)
+        <!-- Top Status Bar Notification -->
+        @if (Model.Status == OrderStatus.OutForDelivery)
         {
-            <tr>
-                <td>@item.FoodItem?.Name</td>
-                <td>@item.Price</td>
-                <td>@item.Quantity</td>
-            </tr>
+            <div class="alert alert-primary border-0 rounded-0 m-0 py-3 px-4 d-flex align-items-center bg-primary text-white">
+                <span class="fs-4 me-3">🚚</span>
+                <div>
+                    <h6 class="mb-0 fw-bold">On The Way!</h6>
+                    <small class="opacity-75">Your driver is rushing your warm meal to your doorstep.</small>
+                </div>
+            </div>
+        }
+        else if (Model.Status == OrderStatus.Delivered)
+        {
+            <div class="alert alert-success border-0 rounded-0 m-0 py-3 px-4 d-flex align-items-center bg-success text-white">
+                <span class="fs-4 me-3">✅</span>
+                <div>
+                    <h6 class="mb-0 fw-bold">Order Delivered</h6>
+                    <small class="opacity-75">Enjoy your food! Thank you for ordering with us.</small>
+                </div>
+            </div>
+        }
+        else if (Model.Status == OrderStatus.Cancelled)
+        {
+            <div class="alert alert-danger border-0 rounded-0 m-0 py-3 px-4 d-flex align-items-center bg-danger text-white">
+                <span class="fs-4 me-3">❌</span>
+                <div>
+                    <h6 class="mb-0 fw-bold">Order Cancelled</h6>
+                    <small class="opacity-75">This order was cancelled and will not be processed.</small>
+                </div>
+            </div>
         }
 
-    </tbody>
+        <!-- Card Branding Header -->
+        <div class="card-body p-4 border-b bg-light-subtle">
+            <div class="row align-items-center g-3">
+                <div class="col-sm-6">
+                    <span class="text-uppercase tracking-wider text-muted fs-7 fw-bold d-block mb-1">Ordering From</span>
+                    <h3 class="fw-bold text-dark mb-0">@(Model.Restaurant?.Name ?? "Delicious Restaurant")</h3>
+                </div>
+                <div class="col-sm-6 text-sm-end">
+                    <span class="text-uppercase tracking-wider text-muted fs-7 fw-bold d-block mb-1">Current Status</span>
 
-</table> 
+                    @if (Model.Status == OrderStatus.Pending)
+                    {
+                        <span class="badge rounded-pill px-3 py-2 text-warning bg-warning-subtle border border-warning fw-semibold">Pending Approval</span>
+                    }
+                    else if (Model.Status == OrderStatus.Confirmed)
+                    {
+                        <span class="badge rounded-pill px-3 py-2 text-info bg-info-subtle border border-info fw-semibold">Confirmed</span>
+                    }
+                    else if (Model.Status == OrderStatus.Preparing)
+                    {
+                        <span class="badge rounded-pill px-3 py-2 text-primary bg-primary-subtle border border-primary fw-semibold">Preparing Food</span>
+                    }
+                    else if (Model.Status == OrderStatus.OutForDelivery)
+                    {
+                        <span class="badge rounded-pill px-3 py-2 text-primary bg-primary-subtle border border-primary fw-semibold">Out For Delivery</span>
+                    }
+                    else if (Model.Status == OrderStatus.Delivered)
+                    {
+                        <span class="badge rounded-pill px-3 py-2 text-success bg-success-subtle border border-success fw-semibold">Delivered</span>
+                    }
+                    else if (Model.Status == OrderStatus.Cancelled)
+                    {
+                        <span class="badge rounded-pill px-3 py-2 text-danger bg-danger-subtle border border-danger fw-semibold">Cancelled</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Receipt Table Section -->
+        <div class="card-body p-4">
+            <h5 class="fw-bold text-secondary mb-3">Order Basket</h5>
+            <div class="table-responsive">
+                <table class="table align-middle border-0 mb-0">
+                    <thead class="text-muted small text-uppercase">
+                        <tr class="border-bottom">
+                            <th class="ps-0 pb-2 border-0">Food Item</th>
+                            <th class="text-center pb-2 border-0" style="width: 100px;">Qty</th>
+                            <th class="text-end pe-0 pb-2 border-0" style="width: 120px;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <tr class="border-bottom-dashed">
+                                <td class="ps-0 py-3">
+                                    <span class="fw-semibold text-dark">@item.FoodItem?.Name</span>
+                                </td>
+                                <td class="text-center py-3 text-secondary fw-medium">
+                                    × @item.Quantity
+                                </td>
+                                <td class="text-end pe-0 py-3 fw-bold text-dark">
+                                    $@(item.Price * item.Quantity)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Receipt Summary Footer -->
+            <div class="row justify-content-end mt-4">
+                <div class="col-sm-5 text-end">
+                    <div class="d-flex justify-content-between align-items-center pt-2">
+                        <span class="text-muted fw-semibold">Total Amount:</span>
+                        <span class="fs-4 fw-bold text-primary">$@Model.TotalAmount</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .fs-7 {
+        font-size: 0.72rem;
+        letter-spacing: 0.8px;
+    }
+
+    .border-bottom-dashed {
+        border-bottom: 1px dashed #e3e6f0 !important;
+    }
+
+    .bg-warning-subtle {
+        background-color: #fff3cd !important;
+        color: #664d03 !important;
+    }
+
+    .bg-info-subtle {
+        background-color: #cff4fc !important;
+        color: #055160 !important;
+    }
+
+    .bg-primary-subtle {
+        background-color: #cfe2ff !important;
+        color: #084298 !important;
+    }
+
+    .bg-success-subtle {
+        background-color: #d1e7dd !important;
+        color: #0f5132 !important;
+    }
+
+    .bg-danger-subtle {
+        background-color: #f8d7da !important;
+        color: #842029 !important;
+    }
+</style>

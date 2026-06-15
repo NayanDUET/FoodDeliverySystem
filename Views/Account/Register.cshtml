@@ -1,48 +1,63 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model FoodDeliverySystem.ViewModels.RegisterViewModel
+﻿@model FoodDeliverySystem.ViewModels.RegisterViewModel
 
-<h2>Register</h2>
+<div class="d-flex justify-content-center align-items-center min-vh-75 my-4">
+    <div class="card shadow-lg border-0 p-4" style="width: 100%; max-width: 450px; border-radius: 1rem;">
 
-<form asp-action="Register" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
+      
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-primary">Create Account</h2>
+            <p class="text-muted small">Join our food delivery community today</p>
+        </div>
 
-    <div class="mb-3">
-        <label>Full Name</label>
-        <input asp-for="FullName" class="form-control" />
+        <form asp-action="Register" method="post">
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+           
+            <div class="form-floating mb-3">
+                <input asp-for="FullName" class="form-control" id="floatingName" placeholder="John Doe" />
+                <label asp-for="FullName" for="floatingName">Full Name</label>
+                <span asp-validation-for="FullName" class="text-danger small"></span>
+            </div>
+
+            
+            <div class="form-floating mb-3">
+                <input asp-for="Email" class="form-control" id="floatingEmail" placeholder="name@example.com" />
+                <label asp-for="Email" for="floatingEmail">Email address</label>
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            
+            <div class="form-floating mb-3">
+                <input type="password" asp-for="Password" class="form-control" id="floatingPassword" placeholder="Password" />
+                <label asp-for="Password" for="floatingPassword">Password</label>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            
+            <div class="form-floating mb-3">
+                <input type="password" asp-for="ConfirmPassword" class="form-control" id="floatingConfirmPassword" placeholder="Confirm Password" />
+                <label asp-for="ConfirmPassword" for="floatingConfirmPassword">Confirm Password</label>
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+
+            
+            <div class="form-floating mb-4">
+                <select asp-for="Role" class="form-select" id="floatingRole">
+                    <option value="" selected disabled hidden>-- Select Role --</option>
+                    <option value="Customer">Customer</option>
+                    <option value="RestaurantOwner">Restaurant Owner</option>
+                    <option value="DeliveryMan">Delivery Man</option>
+                </select>
+                <label asp-for="Role" for="floatingRole">Select Role</label>
+                <span asp-validation-for="Role" class="text-danger small"></span>
+            </div>
+
+            
+            <button class="btn btn-primary w-100 py-2.5 fw-semibold shadow-sm" type="submit" style="border-radius: 0.5rem;">
+                Register
+            </button>
+        </form>
+
     </div>
-
-    <div class="mb-3">
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label>Password</label>
-        <input type="password" asp-for="Password" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label>Confirm Password</label>
-        <input asp-for="ConfirmPassword" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label>Select Role</label>
-
-        <select asp-for="Role" class="form-control">
-            <option value="">-- Select Role --</option>
-            <option value="Customer">Customer</option>
-            <option value="RestaurantOwner">Restaurant Owner</option>
-            <option value="DeliveryMan">Delivery Man</option>
-
-        </select>
-    </div>
-
-    <button class="btn btn-primary">
-        Register
-    </button>
-
-</form>
+</div>

@@ -1,28 +1,94 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model IEnumerable<FoodDeliverySystem.Models.Entities.Restaurant>
+﻿@model IEnumerable<FoodDeliverySystem.Models.Entities.Restaurant>
 
-<h2>Restaurants</h2>
+<div class="container my-4" style="max-width: 1000px;">
 
-<table class="table table-bordered">
+    <!-- Header with Action Button -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <span class="text-uppercase tracking-wider text-muted fs-7 fw-bold">Platform Listings</span>
+            <h2 class="fw-bold text-primary mb-1">Restaurant Management</h2>
+            <p class="text-muted small mb-0">Overview of all active vendors currently listed on the platform</p>
+        </div>
+    </div>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Name</td>
-            <td>@item.Address</td>
+    <!-- Data Table Card -->
+    <div class="card shadow-lg border-0" style="border-radius: 1rem; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-nowrap">
+                <thead class="table-light text-uppercase fs-7 text-muted">
+                    <tr>
+                        <th class="ps-4 py-3">Restaurant Identity</th>
+                        <th class="py-3">Location Address</th>
+                        <th class="pe-4 py-3 text-end" style="width: 150px;">Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-5 text-muted">
+                                <span class="fs-2 d-block mb-2">🍽️</span>
+                                <p class="mb-0 fw-medium">No restaurants listed in the system.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <!-- Identity Column -->
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center border border-primary-subtle shadow-sm flex-shrink-0"
+                                             style="width: 40px; height: 40px;">
+                                            @item.Name.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <div>
+                                            <span class="text-dark fw-bold d-block">@item.Name</span>
+                                            <span class="text-muted x-small">ID: @item.Id</span>
+                                        </div>
+                                    </div>
+                                </td>
 
-            <td>
-                <a asp-action="RestaurantFoods"
-                   asp-route-id="@item.Id"
-                   class="btn btn-info">
-                    Foods
-                </a>
-            </td>
-        </tr>
+                                
+                                <td class="text-secondary fs-7">
+                                    <i class="bi bi-geo-alt me-1 text-muted"></i> @item.Address
+                                </td>
+
+                                
+                                <td class="pe-4 text-end">
+                                    <a asp-action="RestaurantFoods" asp-route-id="@item.Id"
+                                       class="btn btn-outline-info btn-sm rounded-pill px-3 shadow-sm">
+                                        <i class="bi bi-list-ul me-1"></i> View Foods
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fs-7 {
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
     }
 
-</table>
+    .x-small {
+        font-size: 0.75rem;
+    }
+
+    .bg-primary-subtle {
+        background-color: #cfe2ff !important;
+        color: #084298 !important;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fafafa;
+        transition: background-color 0.1s ease;
+    }
+</style>

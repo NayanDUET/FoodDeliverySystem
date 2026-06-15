@@ -1,97 +1,88 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model FoodDeliverySystem.ViewModels.CreateOrderVM
+﻿@model FoodDeliverySystem.ViewModels.CreateOrderVM
 
-<h2>Place Order</h2>
+<div class="d-flex justify-content-center align-items-center min-vh-75 my-4">
+    <div class="card shadow-lg border-0 p-4" style="width: 100%; max-width: 500px; border-radius: 1rem;">
 
-<form asp-action="Create" method="post">
+        <!-- Brand/Header Section -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-primary">Place Your Order</h2>
+            <p class="text-muted small">Review your item and confirm your delivery details</p>
+        </div>
 
-    <input asp-for="FoodItemId" type="hidden" />
+        <form asp-action="Create" method="post">
+            <input asp-for="FoodItemId" type="hidden" />
 
-    <input class="form-control"
-           value="@ViewBag.FoodName"
-           readonly />
-    
-        <label>Quantity</label>
-        <input name="Quantity"
-               class="form-control"
-               value="1"
-               min="1"
-               type="number" />
-   
+            <!-- Read-Only Food Item Display -->
+            <div class="form-floating mb-3">
+                <input class="form-control bg-light border-0 fw-semibold text-secondary"
+                       value="@ViewBag.FoodName"
+                       id="floatingFoodName"
+                       readonly />
+                <label for="floatingFoodName">Item to Order</label>
+            </div>
 
-    
-        <label>Delivery Address</label>
-        <textarea name="DeliveryAddress"
-                  class="form-control"></textarea>
-  
+            <!-- Quantity Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Quantity"
+                       class="form-control"
+                       id="floatingQuantity"
+                       value="1"
+                       min="1"
+                       type="number"
+                       placeholder="1" />
+                <label asp-for="Quantity" for="floatingQuantity">Quantity</label>
+                <span asp-validation-for="Quantity" class="text-danger small"></span>
+            </div>
 
-   
-        <label>Payment Method</label>
+            <!-- Delivery Address Field (Textarea works beautifully with form-floating) -->
+            <div class="form-floating mb-3">
+                <textarea asp-for="DeliveryAddress"
+                          class="form-control"
+                          id="floatingAddress"
+                          placeholder="Your Address"
+                          style="height: 100px; resize: none;"></textarea>
+                <label asp-for="DeliveryAddress" for="floatingAddress">Delivery Address</label>
+                <span asp-validation-for="DeliveryAddress" class="text-danger small"></span>
+            </div>
 
-        <select asp-for="PaymentMethod"
-                id="paymentMethod"
-                class="form-control">
+            <!-- Payment Method Dropdown -->
+            <div class="form-floating mb-3">
+                <select asp-for="PaymentMethod" id="paymentMethod" class="form-select">
+                    <option value="" selected disabled hidden>Select Payment Method</option>
+                    <option value="CashOnDelivery">Cash On Delivery</option>
+                    <option value="Bkash">Bkash</option>
+                    <option value="Rocket">Rocket</option>
+                </select>
+                <label asp-for="PaymentMethod" for="paymentMethod">Payment Method</label>
+                <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
+            </div>
 
-            <option value="">Select Payment Method</option>
+            <!-- Dynamic Mobile Number Field -->
+            <div class="form-floating mb-4" id="mobileNumberDiv" style="display:none">
+                <input asp-for="PaymentNumber" class="form-control" id="floatingMobile" placeholder="017xxxxxxxx" />
+                <label asp-for="PaymentNumber" for="floatingMobile">Mobile Number</label>
+                <span asp-validation-for="PaymentNumber" class="text-danger small"></span>
+            </div>
 
-            <option value="CashOnDelivery">
-                Cash On Delivery
-            </option>
+            <!-- Action Button -->
+            <button type="submit" class="btn btn-primary w-100 py-2.5 fw-semibold shadow-sm" style="border-radius: 0.5rem;">
+                Confirm Order
+            </button>
+        </form>
 
-            <option value="Bkash">
-                Bkash
-            </option>
-
-            <option value="Rocket">
-                Rocket
-            </option>
-
-        </select>
-   
-
-    <div class="mb-3" id="mobileNumberDiv" style="display:none">
-
-        <label>Mobile Number</label>
-
-        <input asp-for="PaymentNumber"
-               class="form-control" />
-
-     </div>
-
-    <button type="submit"
-            class="btn btn-primary">
-        Confirm Order
-    </button>
-
-</form>
-
+    </div>
+</div>
 
 @section Scripts
 {
     <script>
-
-        document
-        .getElementById("paymentMethod")
-        .addEventListener("change", function () {
-
-            var div =
-                document.getElementById("mobileNumberDiv");
-
-            if(this.value === "Bkash" ||
-               this.value === "Rocket")
-            {
+        document.getElementById("paymentMethod").addEventListener("change", function () {
+            var div = document.getElementById("mobileNumberDiv");
+            if (this.value === "Bkash" || this.value === "Rocket") {
                 div.style.display = "block";
-            }
-            else
-            {
+            } else {
                 div.style.display = "none";
             }
-
         });
-
     </script>
 }

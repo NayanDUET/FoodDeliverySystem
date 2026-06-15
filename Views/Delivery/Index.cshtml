@@ -1,38 +1,82 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model IEnumerable<FoodDeliverySystem.Models.Entities.Order>
+﻿@model IEnumerable<FoodDeliverySystem.Models.Entities.Order>
 
-<h2>Available Orders</h2>
+<div class="container my-4" style="max-width: 950px;">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Order</th>
-            <th>Address</th>
-            <th>Total</th>
-            <th></th>
-        </tr>
-    </thead>
+    <!-- Header Section -->
+    <div class="mb-4">
+        <span class="text-uppercase tracking-wider text-muted fs-7 fw-bold">Job Board</span>
+        <h2 class="fw-bold text-primary mb-1">Available Orders</h2>
+        <p class="text-muted small">Claim these pending shipments to start earning delivery fees</p>
+    </div>
 
-    <tbody>
-        @foreach (var order in Model)
-        {
-            <tr>
-                <td>#@order.Id</td>
-                <td>@order.DeliveryAddress</td>
-                <td>@order.TotalAmount</td>
+    <!-- Main Available Jobs Card -->
+    <div class="card shadow-lg border-0" style="border-radius: 1rem; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-nowrap">
+                <thead class="table-light text-uppercase fs-7 text-muted">
+                    <tr>
+                        <th class="ps-4 py-3" style="width: 120px;">Order</th>
+                        <th class="py-3">Address</th>
+                        <th class="py-3" style="width: 140px;">Total</th>
+                        <th class="pe-4 py-3 text-end" style="width: 160px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">
+                                <span class="fs-2 d-block mb-2">🏁</span>
+                                <p class="mb-1 fw-semibold">No available orders right now.</p>
+                                <small class="text-secondary">All caught up! Check back soon for new requests.</small>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <!-- Order ID -->
+                                <td class="ps-4 fw-bold text-secondary">#@order.Id</td>
 
-                <td>
-                    <a asp-action="Pick"
-                       asp-route-id="@order.Id"
-                       class="btn btn-success">
-                        Pick Order
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                                <!-- Delivery Address with Text Truncation and Tooltip -->
+                                <td>
+                                    <span class="text-dark fw-medium text-truncate d-block" style="max-width: 380px;" title="@order.DeliveryAddress">
+                                        📍 @order.DeliveryAddress
+                                    </span>
+                                </td>
+
+                                <!-- Total Amount -->
+                                <td class="fw-bold text-dark">
+                                    $@order.TotalAmount
+                                </td>
+
+                                <!-- Claim/Pick Job Action Button -->
+                                <td class="pe-4 text-end">
+                                    <a asp-action="Pick" asp-route-id="@order.Id"
+                                       class="btn btn-primary btn-sm rounded-pill px-3 fw-bold shadow-sm py-2">
+                                        <i class="bi bi-bicycle me-1"></i> Pick Order
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Global layout continuity guidelines */
+    .fs-7 {
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fafafa;
+        transition: background-color 0.15s ease;
+    }
+</style>
