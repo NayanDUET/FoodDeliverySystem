@@ -8,7 +8,7 @@
             <p class="text-muted small">Please sign in to your food delivery account</p>
         </div>
 
-        <form asp-action="Login">
+        <form asp-action="Login" autocomplete="off">
             <div class="form-floating mb-3">
                 <input asp-for="Email" class="form-control" id="floatingEmail" placeholder="name@example.com" />
                 <label asp-for="Email" for="floatingEmail">Email address</label>

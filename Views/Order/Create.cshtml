@@ -9,7 +9,7 @@
             <p class="text-muted small">Review your item and confirm your delivery details</p>
         </div>
 
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" autocomplete="off">
             <input asp-for="FoodItemId" type="hidden" />
 
             <!-- Read-Only Food Item Display -->

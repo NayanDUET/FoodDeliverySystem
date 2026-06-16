@@ -80,12 +80,53 @@ namespace FoodDeliverySystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Restaurant restaurant)
+        public async Task<IActionResult> Edit(int id, Restaurant restaurant)
         {
+            if (id != restaurant.Id)
+            {
+                return BadRequest();
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Restaurants.Update(restaurant);
-                await _context.SaveChangesAsync();
+                
+                var existingRestaurant = await _context.Restaurants.FindAsync(id);
+
+                if (existingRestaurant == null)
+                {
+                    return NotFound();
+                }
+
+               
+                var userId = _userManager.GetUserId(User);
+
+                if (existingRestaurant.OwnerId != userId)
+                {
+                    return Forbid(); 
+                }
+
+                
+                existingRestaurant.Name = restaurant.Name;
+                existingRestaurant.Description = restaurant.Description;
+                existingRestaurant.Address = restaurant.Address;
+                existingRestaurant.PhoneNumber = restaurant.PhoneNumber;
+
+                try
+                {
+                    _context.Restaurants.Update(existingRestaurant);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Restaurants.Any(e => e.Id == restaurant.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
 
                 return RedirectToAction(nameof(Index));
             }

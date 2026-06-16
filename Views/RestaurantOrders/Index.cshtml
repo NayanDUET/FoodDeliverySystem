@@ -1,77 +1,144 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@*    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860*@
 @using FoodDeliverySystem.Models.Enums
 @model IEnumerable<FoodDeliverySystem.Models.Entities.Order>
 
-<h2>Restaurant Name:  - @ViewBag.RestaurantName</h2>
+<div class="container my-5">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <span class="text-muted text-uppercase small tracking-wider">Restaurant Dashboard</span>
+            <h2 class="fw-bold text-dark m-0">@ViewBag.RestaurantName</h2>
+        </div>
+        <div class="text-muted small">
+            Total Orders: <span class="badge bg-secondary rounded-pill">@Model.Count()</span>
+        </div>
+    </div>
 
-<table class="table table-bordered">
-
-    <thead>
-        <tr>
-            <th>Order Id</th>
-            <th>Delivery Address</th>
-            <th>Total Amount</th>
-            <th>Status</th>
-            <th>Created</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        @foreach (var order in Model)
-        {
-            <tr>
-                <td>@order.Id</td>
-                <td>@order.DeliveryAddress</td>
-                <td>@order.TotalAmount</td>
-                <td>@order.Status</td>
-                <td>@order.CreatedAt</td>
-
-                <td>
-
-                    @if (order.Status == OrderStatus.Pending)
+    <!-- Main Table Card Container -->
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light border-bottom">
+                    <tr>
+                        <th class="ps-4 py-3 text-uppercase text-muted fs-7 fw-semibold">Order ID</th>
+                        <th class="py-3 text-uppercase text-muted fs-7 fw-semibold">Delivery Address</th>
+                        <th class="py-3 text-uppercase text-muted fs-7 fw-semibold">Total Amount</th>
+                        <th class="py-3 text-uppercase text-muted fs-7 fw-semibold">Status</th>
+                        <th class="py-3 text-uppercase text-muted fs-7 fw-semibold">Created At</th>
+                        <th class="pe-4 py-3 text-uppercase text-muted fs-7 fw-semibold text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
                     {
-                        <a asp-action="Accept"
-                           asp-route-id="@order.Id"
-                           class="btn btn-success btn-sm">
-                            Accept
-                        </a>
-
-                        <a asp-action="Reject"
-                           asp-route-id="@order.Id"
-                           class="btn btn-danger btn-sm">
-                            Reject
-                        </a>
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                                No orders available at the moment.
+                            </td>
+                        </tr>
                     }
-
-                    @if (order.Status == OrderStatus.OutForDelivery)
+                    else
                     {
-                        <span class="badge bg-info">
-                            Picked by delivery partner
-                        </span>
+                        foreach (var order in Model)
+                        {
+                            <tr>
+                                <!-- Order ID -->
+                                <td class="ps-4 fw-bold text-secondary">
+                                    #@order.Id
+                                </td>
+
+                                <!-- Delivery Address -->
+                                <td class="text-wrap" style="max-width: 250px;">
+                                    <span class="d-block text-dark fw-medium">@order.DeliveryAddress</span>
+                                </td>
+
+                                <!-- Total Amount -->
+                                <td class="fw-bold text-dark">
+                                    @order.TotalAmount.ToString("C")
+                                </td>
+
+                                <!-- Status Badge Logic -->
+                                <td>
+                                    @switch (order.Status)
+                                    {
+                                        case OrderStatus.Pending:
+                                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded-pill fw-medium">Pending</span>
+                                            break;
+                                        case OrderStatus.OutForDelivery:
+                                            <span class="badge bg-info-subtle text-info border border-info-subtle px-2.5 py-1.5 rounded-pill fw-medium">Out for Delivery</span>
+                                            break;
+                                        case OrderStatus.Delivered:
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill fw-medium">Delivered</span>
+                                            break;
+                                        case OrderStatus.Cancelled:
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1.5 rounded-pill fw-medium">Rejected</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary-subtle text-secondary px-2.5 py-1.5 rounded-pill fw-medium">@order.Status</span>
+                                            break;
+                                    }
+                                </td>
+
+                                <!-- Timestamp -->
+                                <td class="text-muted small">
+                                    @order.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                </td>
+
+                                <!-- Action Buttons -->
+                                <td class="pe-4 text-end">
+                                    <div class="d-inline-flex gap-2 justify-content-end align-items-center w-100">
+
+                                        @if (order.Status == OrderStatus.Pending)
+                                        {
+                                            <a asp-action="Accept" asp-route-id="@order.Id" class="btn btn-sm btn-success px-3 rounded-2 shadow-sm d-inline-flex align-items-center">
+                                                Accept
+                                            </a>
+                                            <a asp-action="Reject" asp-route-id="@order.Id" class="btn btn-sm btn-outline-danger px-3 rounded-2 d-inline-flex align-items-center">
+                                                Reject
+                                            </a>
+                                        }
+
+                                        @if (order.Status == OrderStatus.OutForDelivery)
+                                        {
+                                            <small class="text-info bg-info-subtle px-2 py-1 rounded border border-info-subtle fw-medium me-2">
+                                                ⚡ Picked by partner
+                                            </small>
+                                        }
+
+                                        @if (order.Status == OrderStatus.Delivered)
+                                        {
+                                            <small class="text-success bg-success-subtle px-2 py-1 rounded border border-success-subtle fw-medium me-2">
+                                                ✔ Customer received
+                                            </small>
+                                        }
+
+                                        <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-light border border-gray px-3 rounded-2 text-secondary">
+                                            Details
+                                        </a>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     }
-                    @if (order.Status == OrderStatus.Delivered)
-                    {
-                        <span class="badge bg-info">
-                            Customer recieved
-                        </span>
-                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-                    <a asp-action="Details"
-                       asp-route-id="@order.Id"
-                       class="btn btn-info btn-sm">
-                        Details
-                    </a>
+<!-- Extra Optional CSS styling for subtle refinements -->
+<style>
+    .fs-7 {
+        font-size: 0.75rem;
+    }
 
-                </td>
-            </tr>
-        }
+    .tracking-wider {
+        letter-spacing: 0.05em;
+    }
 
-    </tbody>
-
-</table>
+    .table hover tbody tr:hover {
+        background-color: #fcfcfc;
+    }
+</style>
